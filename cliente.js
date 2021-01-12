@@ -51,10 +51,9 @@ data_saida = (envio_s, envio_us) => {
 
 dadosToFile = async (dados, i) => {
     console.log('i ===> ' + i)
-    console.log('dados.id ===> ' + dados.id)
+    console.log(dados)
     await array_dados[i].push(dados)
-    if (dados.id >= 10) {
-        // if (dados.id == '0') 
+    if (dados.id == 15) {
         await jsonexport(array_dados[i], async (err, csv) => {
             if (err) return console.error(err)
             let arquivo = await csv
@@ -62,12 +61,5 @@ dadosToFile = async (dados, i) => {
                 if (err) return console.log(err)
             })
         })
-        // else await jsonexport(dados, includeHeaders = false, async (err, csv) => {
-        //     if (err) return console.error(err)
-        //     let arquivo = await csv
-        //     fs.appendFile('c_' + i + '.csv', arquivo, async (err) => {
-        //         if (err) return console.log(err)
-        //     })
-        // })
     }
 }
