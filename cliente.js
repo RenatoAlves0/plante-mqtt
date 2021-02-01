@@ -54,10 +54,9 @@ data_saida = (envio_s, envio_us) => {
 }
 
 dadosToFile = async (dados, i) => {
-    // console.log('i ===> ' + i)
-    // console.log(dados)
+    console.log('i ===> ' + i)
+    console.log(dados)
     await array_dados[i].push(dados)
-    // if (dados.id <= 14) {
     if (dados.id >= 14 && !gravado[i]) {
         await jsonexport(array_dados[i], async (err, csv) => {
             if (err) return console.error(err)
