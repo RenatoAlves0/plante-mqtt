@@ -19,7 +19,7 @@ server.on('clientConnected', function (client) {
 })
 
 server.on('published', function (packet, client) {
-    // console.log('Mensagem recebida', packet.payload)
+    console.log('Mensagem recebida', packet.payload)
 })
 
 server.on('ready', setup)
