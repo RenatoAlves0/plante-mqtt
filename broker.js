@@ -14,7 +14,7 @@ var settings = {
 
 var server = new mosca.Server(settings)
 
-server.on('clientConnected', function (client) {
+server.on('clientConnected', (client) => {
     console.log('client connected', client.id)
 })
 
