@@ -12,17 +12,18 @@ client_mqtt.on('connect', () => {
 })
 
 client_mqtt.on('message', (topic, message) => {
-    console.log('Tópico: ' + topic.toString())
+    console.log('Tópico: ' + String(topic))
     console.log('Tamanho Tópico: ' + Buffer.byteLength(topic) + ' bytes')
     console.log('Tamanho Mensagem: ' + Buffer.byteLength(message) + ' bytes')
-    dados = JSON.parse(message.toString())
-
-    dados.chegada = String(new Date().getTime() / 1000)
-    dados.chegada = data_format_ms(dados.chegada.split('.')[0], dados.chegada.split('.')[1])
-
-    if (dados.fim) gravar()
+    dados = JSON.parse(String(message))
+    if (dados.fim) {
+        gravar()
+        console.log(dados)
+    }
     else {
-        dados.envio = data_format_us(dados.envio_s, dados.envio_us)
+        dados.chegada = String(new Date().getTime() / 1000)
+        dados.chegada = data_format_ms(dados.chegada.split('.')[0], dados.chegada.split('.')[1])
+        dados.envio = data_format_us(dados.s, dados.us)
         let envio = new Date(parseInt(dados.envio))
         let chegada = new Date(parseInt(dados.chegada))
         dados.delay_ms = Math.abs(chegada - envio)
@@ -39,8 +40,8 @@ client_mqtt.on('message', (topic, message) => {
 })
 
 data_format_ms = (s, us) => {
-    s = s.toString()
-    us = us.toString()
+    s = String(s)
+    us = String(us)
     let qtd_zero = 3 - us.length
     for (let i = 0; i < qtd_zero; i++)
         s += '0'
@@ -50,8 +51,8 @@ data_format_ms = (s, us) => {
 }
 
 data_format_us = (s, us) => {
-    s = s.toString()
-    us = us.toString()
+    s = String(s)
+    us = String(us)
     let qtd_zero = 6 - us.length
     for (let i = 0; i < qtd_zero; i++)
         s += '0'
@@ -64,7 +65,7 @@ gravar = () => {
     jsonexport(array_dados, (err, csv) => {
         if (err) return console.error(err)
         let arquivo = csv
-        fs.writeFile('exp2/1.csv', arquivo, (err) => {
+        fs.writeFile('exp2/100ms_256bytes.csv', arquivo, (err) => {
             if (err) return console.log(err)
             else gravado = true
         })
