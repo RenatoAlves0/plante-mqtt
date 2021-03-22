@@ -26,7 +26,9 @@ client_mqtt.on('message', (topic, message) => {
         dados.envio = data_format_us(dados.s, dados.us)
         let envio = new Date(parseInt(dados.envio))
         let chegada = new Date(parseInt(dados.chegada))
-        dados.delay_ms = Math.abs(chegada - envio)
+        dados.delay_ms = chegada - envio
+        if (dados.delay_ms < 0) dados.delay_ms = 0
+
         if (delay_anterior == -1)
             dados.jitter_ms = 0
         else
@@ -40,8 +42,8 @@ client_mqtt.on('message', (topic, message) => {
 })
 
 data_format_ms = (s, us) => {
-    s = String(s)
-    us = String(us)
+    s = String(s) || '0'
+    us = String(us) == 'undefined' ? '000' : String(us)
     let qtd_zero = 3 - us.length
     for (let i = 0; i < qtd_zero; i++)
         s += '0'
@@ -52,7 +54,7 @@ data_format_ms = (s, us) => {
 
 data_format_us = (s, us) => {
     s = String(s)
-    us = String(us)
+    us = String(us) == 'undefined' ? '000' : String(us)
     let qtd_zero = 6 - us.length
     for (let i = 0; i < qtd_zero; i++)
         s += '0'
@@ -65,7 +67,7 @@ gravar = () => {
     jsonexport(array_dados, (err, csv) => {
         if (err) return console.error(err)
         let arquivo = csv
-        fs.writeFile('exp2/100ms_256bytes.csv', arquivo, (err) => {
+        fs.writeFile('exp2/C1000_3.csv', arquivo, (err) => {
             if (err) return console.log(err)
             else gravado = true
         })
