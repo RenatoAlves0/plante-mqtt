@@ -1,51 +1,52 @@
-var mqtt = require('mqtt')
-var client_mqtt = mqtt.connect({ host: 'localhost', port: 1883 })
+const mqtt = require('mqtt')
+const cliente = mqtt.connect({ host: 'localhost', port: 1883, keepalive: 18000 })
 const jsonexport = require('jsonexport')
-fs = require('fs')
+const fs = require('fs')
 let dados = { chegada: undefined, delay_ms: undefined, jitter_ms: undefined }
-let delay_anterior = -1
-let gravado = false
-let array_dados = []
-let ms = 0, mi = 0
+let array_dados = [], delay_anterior = -1, ms = 0, mi = 0, qds = 0, nome_arquivo
 
-client_mqtt.on('connect', () => {
-    client_mqtt.subscribe(['0'], { qos: 0 })
+cliente.on('connect', () => {
+    cliente.subscribe(['0'], { qos: qds })
 })
 
-client_mqtt.on('message', (topic, message) => {
-    // console.log('Tópico: ' + String(topic))
-    // console.log('Tamanho Tópico: ' + Buffer.byteLength(topic) + ' bytes')
-    // console.log('Tamanho Mensagem: ' + Buffer.byteLength(message) + ' Bytes')
+cliente.on('message', (topic, message) => {
     dados = JSON.parse(String(message))
-    if (dados.fim) {
-        gravar()
+    if (dados.reset) {
+        mi = 0
+        ms = 0
+        array_dados = []
+        delay_anterior = -1
+        nome_arquivo = 'exp0/' + dados.nome_arquivo
+        console.log('RESETANDO\n')
         console.log(dados)
-    }
-    else {
-        dados.chegada = String(new Date().getTime() / 1000)
-        dados.chegada = data_format_ms(dados.chegada.split('.')[0], dados.chegada.split('.')[1])
-        dados.envio = data_format_us(dados.s, dados.us)
-        let envio = new Date(parseInt(dados.envio))
-        let chegada = new Date(parseInt(dados.chegada))
-        dados.delay_ms = chegada - envio
-        if (dados.delay_ms < 0) dados.delay_ms = 0
+    } else
+        if (dados.fim) {
+            gravar(dados.total)
+            console.log(dados)
+        }
+        else {
+            dados.chegada = String(new Date().getTime() / 1000)
+            dados.chegada = data_format_ms(dados.chegada.split('.')[0], dados.chegada.split('.')[1])
+            dados.envio = data_format_us(dados.s, dados.us)
+            let envio = new Date(parseInt(dados.envio))
+            let chegada = new Date(parseInt(dados.chegada))
+            dados.delay_ms = chegada - envio
+            if (dados.delay_ms < 0) dados.delay_ms = 0
 
-        if (delay_anterior == -1)
-            dados.jitter_ms = 0
-        else
-            dados.jitter_ms = Math.abs(delay_anterior - dados.delay_ms)
-        delay_anterior = dados.delay_ms
-        delete dados.a
-        mi++
-        ms = ms + dados.delay_ms
-        console.log('Mensagem: ' + Buffer.byteLength(message) + ' B')
-        console.log('Qtd Msg: ' + mi)
-        console.log('Delay::::::::::::::: ' + dados.delay_ms + ' ms')
-        console.log('Média: ' + (ms / mi).toFixed(2) + ' ms\n')
-        array_dados.push(dados)
-    }
-
-    // client_mqtt.end()
+            if (delay_anterior == -1)
+                dados.jitter_ms = 0
+            else
+                dados.jitter_ms = Math.abs(delay_anterior - dados.delay_ms)
+            delay_anterior = dados.delay_ms
+            delete dados.a
+            mi++
+            ms = ms + dados.delay_ms
+            console.log('Mensagem: ' + Buffer.byteLength(message) + ' B')
+            console.log('Qtd Msg: ' + mi)
+            console.log('Delay::::::::::::::: ' + dados.delay_ms + ' ms')
+            console.log('Média: ' + (ms / mi).toFixed(2) + ' ms\n')
+            array_dados.push(dados)
+        }
 })
 
 data_format_ms = (s, us) => {
@@ -68,14 +69,18 @@ data_format_us = (s, us) => {
     return s
 }
 
-gravar = () => {
+gravar = (total) => {
+    let relatorio = nome_arquivo + ': ' + mi + '/' + total + ', ' + (ms / mi).toFixed(2) + ' ms\n'
+    fs.appendFile('relatorio.txt', relatorio, (err) => {
+        if (err) throw err
+        console.log('Updated!')
+    })
+
     jsonexport(array_dados, (err, csv) => {
         if (err) return console.error(err)
         let arquivo = csv
-        fs.writeFile('exp3/teste.csv', arquivo, (err) => {
-            // fs.writeFile('exp3/qos2_4096b0ms_3.csv', arquivo, (err) => {
+        fs.writeFile(nome_arquivo, arquivo, (err) => {
             if (err) return console.log(err)
-            else gravado = true
         })
     })
 }
