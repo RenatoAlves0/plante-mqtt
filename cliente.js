@@ -3,10 +3,12 @@ const cliente = mqtt.connect({ host: 'localhost', port: 1883, keepalive: 18000 }
 const jsonexport = require('jsonexport')
 const fs = require('fs')
 let dados = { chegada: undefined, delay_ms: undefined, jitter_ms: undefined }
-let array_dados = [], delay_anterior = -1, ms = 0, mi = 0, qds = 0, nome_arquivo
+let array_dados = [], delay_anterior = -1, ms = 0, mi = 0, nome_arquivo
 
 cliente.on('connect', () => {
-    cliente.subscribe(['0'], { qos: qds })
+    cliente.subscribe('0', { qos: 0 })
+    cliente.subscribe('1', { qos: 1 })
+    cliente.subscribe('2', { qos: 2 })
 })
 
 cliente.on('message', (topic, message) => {
@@ -16,7 +18,7 @@ cliente.on('message', (topic, message) => {
         ms = 0
         array_dados = []
         delay_anterior = -1
-        nome_arquivo = 'exp0/' + dados.nome_arquivo
+        nome_arquivo = 'exp1/' + dados.nome_arquivo
         console.log('RESETANDO\n')
         console.log(dados)
     } else
@@ -71,7 +73,7 @@ data_format_us = (s, us) => {
 
 gravar = (total) => {
     let relatorio = nome_arquivo + ': ' + mi + '/' + total + ', ' + (ms / mi).toFixed(2) + ' ms\n'
-    fs.appendFile('relatorio.txt', relatorio, (err) => {
+    fs.appendFile('relatorio_exp1.txt', relatorio, (err) => {
         if (err) throw err
         console.log('Updated!')
     })
