@@ -169,3 +169,21 @@ exp1/qos2_4096b100ms_1.csv: 597/597, 2.82 ms
 exp1/qos2_4096b100ms_2.csv: 597/597, 2.87 ms
 exp1/qos2_4096b100ms_3.csv: 598/598, 2.57 ms
 
+exp1/qos0_2048b0ms_1.csv: 48166/48166, 31.23 ms
+exp1/qos0_2048b0ms_2.csv: 48320/48320, 30.99 ms
+exp1/qos0_2048b0ms_3.csv: 48304/48304, 31.02 ms
+exp1/qos0_2048b20ms_1.csv: 2937/2937, 20.27 ms
+exp1/qos0_2048b20ms_2.csv: 2936/2936, 19.70 ms
+exp1/qos0_2048b20ms_3.csv: 2936/2936, 19.82 ms
+exp1/qos0_2048b40ms_1.csv: 1484/1484, 18.15 ms
+exp1/qos0_2048b40ms_2.csv: 1484/1484, 18.62 ms
+exp1/qos0_2048b40ms_3.csv: 1484/1484, 18.58 ms
+exp1/qos0_2048b60ms_1.csv: 992/992, 2.60 ms
+exp1/qos0_2048b60ms_2.csv: 992/992, 2.61 ms
+exp1/qos0_2048b60ms_3.csv: 992/992, 2.64 ms
+exp1/qos0_2048b80ms_1.csv: 746/746, 2.63 ms
+exp1/qos0_2048b80ms_2.csv: 746/746, 2.59 ms
+exp1/qos0_2048b80ms_3.csv: 746/746, 2.60 ms
+exp1/qos0_2048b100ms_1.csv: 598/598, 2.43 ms
+exp1/qos0_2048b100ms_2.csv: 599/599, 2.02 ms
+exp1/qos0_2048b100ms_3.csv: 598/598, 2.59 ms
