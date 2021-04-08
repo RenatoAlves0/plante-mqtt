@@ -1,0 +1,23 @@
+MQTT
+100 = 587,588,589
+
+### A ###
+Tamanho Url: 1 bytes
+Tamanho Mensagem: 29 bytes
+Pacote: 88 bytes
+"Excedente": 58 bytes
+"String VAZIA"
+
+### B ###
+Tamanho Url: 1 bytes
+Tamanho Mensagem: 67 bytes
+Pacote: 126 bytes
+"Excedente": 58 bytes
+1234abcdefghijklmnopqrstuvwxyz
+
+### C ###
+Tamanho Url: 1 bytes
+Tamanho Mensagem: 195 bytes
+Pacote: 255 bytes
+"Excedente": 59 bytes
+12abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
