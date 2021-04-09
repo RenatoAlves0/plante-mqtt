@@ -18,7 +18,7 @@ cliente.on('message', (topic, message) => {
         ms = 0
         array_dados = []
         delay_anterior = -1
-        nome_arquivo = 'exp1/' + dados.nome_arquivo
+        nome_arquivo = 'exp2/' + dados.nome_arquivo
         console.log('RESETANDO\n')
         console.log(dados)
     } else
@@ -73,7 +73,7 @@ data_format_us = (s, us) => {
 
 gravar = (total) => {
     let relatorio = nome_arquivo + ': ' + mi + '/' + total + ', ' + (ms / mi).toFixed(2) + ' ms\n'
-    fs.appendFile('relatorio_exp1.txt', relatorio, (err) => {
+    fs.appendFile('relatorio_exp2.txt', relatorio, (err) => {
         if (err) throw err
         console.log('Updated!')
     })
